@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Output files (generated, don't commit)
+output/
+*.json
+*.csv
+
+# Sensitive files - NEVER commit these
+inventory/devices.yaml
+.env
+*.key
+*.pem
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
