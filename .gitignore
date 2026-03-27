@@ -27,3 +27,4 @@ inventory/devices.yaml
 .DS_Store
 Thumbs.dbinventory/devices.yaml
 test_export.py
+venv/
