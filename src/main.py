@@ -1,12 +1,10 @@
-import yaml                                      # to load devices from YAML file
-import argparse                                  # to handle command line arguments
-from src.ssh_handler import connect_device       # handles SSH connection to each device
-from src.exporter import export_json, export_csv # functions to save output to files
+import yaml                                       # to load devices from YAML file
+from src.parser import get_args                   # CLI argument parsing
+from src.ssh_handler import connect_device        # handles SSH connection to each device
+from src.exporter import export_json, export_csv  # functions to save output to files
 
-# define CLI arguments
-parser = argparse.ArgumentParser(description="Network Automation Inventory Tool")
-parser.add_argument("--inventory", default="inventory/devices.yaml", help="path to devices YAML file")
-args = parser.parse_args()
+# parse CLI arguments
+args = get_args()
 
 # load devices from YAML inventory file (path from CLI or default)
 with open(args.inventory) as f:
@@ -14,8 +12,8 @@ with open(args.inventory) as f:
 
 # commands to run on each device
 commands = {
-    "interfaces": "show ip interface brief",     # get interface status and IPs
-    "routes": "show ip route"                    # get routing table
+    "interfaces": "show ip interface brief",  # get interface status and IPs
+    "routes": "show ip route"                 # get routing table
 }
 
 raw_data = {}  # will hold all collected data, keyed by device IP/hostname
@@ -30,6 +28,13 @@ for device in devices:
     for key, cmd in commands.items():
         # send command and parse output into structured data using TextFSM templates
         output = conn.send_command(cmd, use_textfsm=True)
+
+        # confirm whether TextFSM parsed it or returned raw text
+        if isinstance(output, list):
+            print(f"{cmd}: parsed OK ({len(output)} entries)")
+        else:
+            print(f"{cmd}: raw text returned, no TextFSM template matched")
+
         device_data[key] = output  # store result under "interfaces" or "routes"
 
     raw_data[device["host"]] = device_data  # add this device's data to the main dict
