@@ -1,7 +1,6 @@
 # Network Automation Inventory Tool
 
-Automates SSH collection of interface and routing data from network devices.
-Parses output using TextFSM and exports to JSON and CSV.
+A Python script that reads device credentials from a YAML file, SSHs into each device via Netmiko, runs show commands, uses TextFSM templates to parse the raw CLI output into structured data, and exports the results to JSON and CSV.
 
 ## Features
 - SSH into multiple devices via Netmiko
