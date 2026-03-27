@@ -1,9 +1,15 @@
 import yaml                                      # to load devices from YAML file
+import argparse                                  # to handle command line arguments
 from src.ssh_handler import connect_device       # handles SSH connection to each device
 from src.exporter import export_json, export_csv # functions to save output to files
 
-# load devices from YAML inventory file
-with open("devices.yaml") as f:
+# define CLI arguments
+parser = argparse.ArgumentParser(description="Network Automation Inventory Tool")
+parser.add_argument("--inventory", default="inventory/devices.yaml", help="path to devices YAML file")
+args = parser.parse_args()
+
+# load devices from YAML inventory file (path from CLI or default)
+with open(args.inventory) as f:
     devices = yaml.safe_load(f)
 
 # commands to run on each device
