@@ -26,7 +26,7 @@ for device in devices:
 
     # Run commands
     for key, cmd in commands.items():
-        output = conn.send_command(cmd)
+        output = conn.send_command(cmd, use_textfsm=True)
         device_data[key] = output
 
     raw_data[device["host"]] = device_data
