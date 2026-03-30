@@ -28,3 +28,4 @@ inventory/devices.yaml
 Thumbs.dbinventory/devices.yaml
 test_export.py
 venv/
+test.json
