@@ -25,7 +25,8 @@ inventory/devices.yaml
 
 # OS
 .DS_Store
-Thumbs.dbinventory/devices.yaml
+Thumbs.db
+
+# Local scratch / tests
 test_export.py
-venv/
 test.json

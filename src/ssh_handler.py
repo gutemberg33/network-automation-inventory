@@ -1,13 +1,20 @@
-from netmiko import ConnectHandler  # netmiko library for SSH connections to network devices
+import logging
+
+from netmiko import ConnectHandler
+from netmiko.exceptions import (
+    ConnectionException,
+    NetmikoAuthenticationException,
+    NetmikoTimeoutException,
+)
+
+log = logging.getLogger(__name__)
+
 
 def connect_device(device):
     """Open an SSH connection to a device and return the connection object."""
+    host = device.get("host", "?")
     try:
-        # unpack device dict (host, username, password, device_type) into ConnectHandler
-        connection = ConnectHandler(**device)
-        return connection  # return active connection to be used in main.py
-
-    except Exception as e:
-        # if connection fails, print the error and return None so main.py can skip this device
-        print(f"Connection failed: {device['host']} - {e}")
+        return ConnectHandler(**device)
+    except (NetmikoTimeoutException, NetmikoAuthenticationException, ConnectionException, OSError) as e:
+        log.warning("Connection failed: %s - %s", host, e)
         return None

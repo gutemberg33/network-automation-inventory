@@ -1,0 +1,6 @@
+# Optional: pass with --commands inventory/commands.yaml
+# Keys become section names in JSON/CSV filenames; values are CLI commands.
+
+commands:
+  interfaces: "show ip interface brief"
+  routes: "show ip route"

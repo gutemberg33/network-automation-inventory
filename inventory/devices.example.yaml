@@ -1,0 +1,7 @@
+# Copy to inventory/devices.yaml and fill in real credentials (devices.yaml is gitignored).
+# Supported shapes: a bare list of devices, or a mapping with a top-level `devices` key.
+
+- host: 192.168.1.1
+  username: admin
+  password: cisco
+  device_type: cisco_ios

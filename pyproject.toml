@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "network-automation-inventory"
+version = "0.1.0"
+description = "SSH to network devices, parse show commands with TextFSM, export JSON/CSV"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "netmiko>=4.6.0",
+    "ntc_templates>=9.0.0",
+    "PyYAML>=6.0.3",
+]
+
+[project.scripts]
+network-inventory = "src.main:cli_main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

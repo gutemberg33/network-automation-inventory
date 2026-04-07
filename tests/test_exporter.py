@@ -1,34 +1,43 @@
-import os
 import json
-import pytest
-from src.exporter import export_json, export_csv
 
-# mock data mimicking TextFSM parsed output
+from src.exporter import export_csv, export_json
+
 MOCK_DATA = {
     "192.168.1.1": {
         "interfaces": [
-            {"intf": "GigabitEthernet0", "ipaddr": "192.168.1.1", "status": "up", "proto": "up"}
+            {
+                "intf": "GigabitEthernet0",
+                "ipaddr": "192.168.1.1",
+                "status": "up",
+                "proto": "up",
+            }
         ],
         "routes": [
-            {"network": "0.0.0.0", "mask": "0.0.0.0", "nexthop": "192.168.1.254", "protocol": "S"}
-        ]
+            {
+                "network": "0.0.0.0",
+                "mask": "0.0.0.0",
+                "nexthop": "192.168.1.254",
+                "protocol": "S",
+            }
+        ],
     }
 }
 
-def test_export_json_creates_file():
-    """JSON file should be created in output directory."""
-    export_json(MOCK_DATA, filename="output/test_data.json")
-    assert os.path.exists("output/test_data.json")
 
-def test_export_json_content():
-    """JSON file should contain correct data."""
-    export_json(MOCK_DATA, filename="output/test_data.json")
-    with open("output/test_data.json") as f:
-        data = json.load(f)
+def test_export_json_creates_file(tmp_path):
+    out = tmp_path / "data.json"
+    export_json(MOCK_DATA, filename=str(out))
+    assert out.is_file()
+
+
+def test_export_json_content(tmp_path):
+    out = tmp_path / "data.json"
+    export_json(MOCK_DATA, filename=str(out))
+    data = json.loads(out.read_text(encoding="utf-8"))
     assert "192.168.1.1" in data
 
-def test_export_csv_creates_files():
-    """CSV files should be created per device per section."""
-    export_csv(MOCK_DATA)
-    assert os.path.exists("output/192.168.1.1_interfaces.csv")
-    assert os.path.exists("output/192.168.1.1_routes.csv")
+
+def test_export_csv_creates_files(tmp_path):
+    export_csv(MOCK_DATA, output_dir=str(tmp_path))
+    assert (tmp_path / "192.168.1.1_interfaces.csv").is_file()
+    assert (tmp_path / "192.168.1.1_routes.csv").is_file()
